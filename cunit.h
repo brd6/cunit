@@ -36,16 +36,16 @@
 					   ##__VA_ARGS__)
 # endif
 
-extern int tests_run;
-extern int tests_passed;
-extern int ret;
+extern int _tests_run_;
+extern int _tests_passed_;
+extern int _ret_;
 
-# define CU_INIT() int tests_run = 0; int tests_passed = 0; int ret = 0;
+# define CU_INIT() int _tests_run_ = 0; int _tests_passed_ = 0; int _ret_ = 0;
 
 # define TEST(_name) static int _name()
 
-# define CU_ASSERT(test) ret = test;
-# define CU_ASSERT_MSG(test, message, ...) if (!(test)) { PRINT_ERROR(message, ## __VA_ARGS__); } ret = test;
+# define CU_ASSERT(test) _ret_ = test;
+# define CU_ASSERT_MSG(test, message, ...) if (!(test)) { PRINT_ERROR(message, ## __VA_ARGS__); } _ret_ = test;
 # define CU_ASSERT_NUM(nb1, nb2, op, message, ...) CU_ASSERT_MSG(nb1 op nb2, message, ## __VA_ARGS__)
 # define CU_ASSERT_NUM_EQ(nb1, nb2, message, ...) CU_ASSERT_NUM(nb1, nb2, ==, message, ## __VA_ARGS__)
 # define CU_ASSERT_NUM_NE(nb1, nb2, message, ...) CU_ASSERT_NUM(nb1, nb2, !=, message, ## __VA_ARGS__)
@@ -65,24 +65,24 @@ extern int ret;
 # define CU_ASSERT_PTR_NON_NULL(ptr, message, ...) CU_ASSERT_PTR(ptr, NULL, !=, message, ## __VA_ARGS__)
 # define CU_ASSERT_PTR_EQ(ptr1, ptr2, message, ...) CU_ASSERT_PTR(ptr1, ptr2, ==, message, ## __VA_ARGS__)
 # define CU_ASSERT_PTR_NE(ptr1, ptr2, message, ...) CU_ASSERT_PTR(ptr1, ptr2, !=, message, ## __VA_ARGS__)
-# define CU_RUN_TEST(test) printf("[ RUN      ] %d - %s\n", tests_run, "" #test); \
+# define CU_RUN_TEST(test) printf("[ RUN      ] %d - %s\n", _tests_run_, "" #test); \
   test();								\
-  tests_run++;								\
-  if (!ret) { printf("[  FAILED  ] %d - %s\n", tests_run - 1, "" #test); return ; } \
-  else { printf("[       OK ] %d - %s\n", tests_run - 1, "" #test); tests_passed++; }
+  _tests_run_++;								\
+  if (!_ret_) { printf("[  FAILED  ] %d - %s\n", _tests_run_ - 1, "" #test); return ; } \
+  else { printf("[       OK ] %d - %s\n", _tests_run_ - 1, "" #test); _tests_passed_++; }
 # define RUN_ALL_TESTS(name) int main(int ac, char **av) {		\
     printf("Running %s from %s\n", "" #name, av[0]);			\
     printf("[----------] cunit setup\n");				\
     name();								\
     printf("[----------] cunit end\n");					\
-    if (tests_passed != tests_run) {					\
+    if (_tests_passed_ != _tests_run_) {					\
       printf("\n1 FAILED TEST\n");					\
     }									\
     else {								\
       printf("\nALL TESTS PASSED\n");					\
     }									\
-    printf("Tests run: %d\n", tests_run);				\
-    exit(tests_passed != tests_run);					\
+    printf("Tests run: %d\n", _tests_run_);				\
+    exit(_tests_passed_ != _tests_run_);					\
   }
 
 #endif /* !CUNIT_H_ */
