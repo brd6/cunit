@@ -68,18 +68,18 @@ extern int _ret_;
 # define CU_RUN_TEST(test) printf("[ RUN      ] %d - %s\n", _tests_run_, "" #test); \
   test();								\
   _tests_run_++;								\
-  if (!_ret_) { printf("[  FAILED  ] %d - %s\n", _tests_run_ - 1, "" #test); return ; } \
-  else { printf("[       OK ] %d - %s\n", _tests_run_ - 1, "" #test); _tests_passed_++; }
+  if (!_ret_) { printf("[  %sFAILED%s  ] %d - %s\n", COLOR_RED, COLOR_RESET, _tests_run_ - 1, "" #test); return ; } \
+  else { printf("[       %sOK%s ] %d - %s\n", COLOR_GREEN, COLOR_RESET, _tests_run_ - 1, "" #test); _tests_passed_++; }
 # define RUN_ALL_TESTS(name) int main(int ac, char **av) {		\
     printf("Running %s from %s\n", "" #name, av[0]);			\
     printf("[----------] cunit setup\n");				\
     name();								\
     printf("[----------] cunit end\n");					\
     if (_tests_passed_ != _tests_run_) {					\
-      printf("\n1 FAILED TEST\n");					\
+      printf("\n1 %sFAILED TEST%s\n", COLOR_RED, COLOR_RESET);					\
     }									\
     else {								\
-      printf("\nALL TESTS PASSED\n");					\
+      printf("\n%sALL TESTS PASSED%s\n", COLOR_GREEN, COLOR_RESET);					\
     }									\
     printf("Tests run: %d\n", _tests_run_);				\
     exit(_tests_passed_ != _tests_run_);					\
